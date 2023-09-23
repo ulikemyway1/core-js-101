@@ -234,8 +234,8 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  throw new Error('Not implemented');
+function toCsvText(arr) {
+  return arr.map((item) => `${item.join(',')}\n`).join('').slice(0, -1);
 }
 
 /**
@@ -268,8 +268,9 @@ function toArrayOfSquares(arr) {
  *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
-function getMovingSum(/* arr */) {
-  throw new Error('Not implemented');
+function getMovingSum(arr) {
+  return arr.map((item, index) => [arr.slice(0, index + 1)]).flat()
+    .map((subar) => subar.reduce((sum, current) => sum + current));
 }
 
 /**
@@ -307,10 +308,14 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  const result = [];
+  arr.map((item, index) => {
+    result.push(...new Array(index + 1).fill(item));
+    return item;
+  });
+  return result;
 }
-
 
 /**
  * Returns the 3 largest numbers from the specified array
@@ -366,8 +371,9 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const dict = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  return arr.sort((a, b) => dict.indexOf(a) - dict.indexOf(b));
 }
 
 /**
@@ -428,8 +434,13 @@ function getFalsyValuesCount(arr) {
  *    [ null, undefined, null ], null => 2
  *    [ true, 0, 1, 'true' ], true => 1
  */
-function findAllOccurrences(/* arr, item */) {
-  throw new Error('Not implemented');
+function findAllOccurrences(arr, item) {
+  return arr.filter((el) => {
+    if (el === item) {
+      return 1;
+    }
+    return null;
+  }).length;
 }
 
 /**
@@ -474,10 +485,25 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  const result = arr.map(() => arr.sort((a, b) => a.country.charCodeAt(0)
+  - b.country.charCodeAt(0))).map(() => arr.sort((a, b) => {
+    if (a.country.charCodeAt(0) === b.country.charCodeAt(0)) {
+      return a.city.charCodeAt(0) - b.city.charCodeAt(0);
+    }
+    return 1;
+  }));
+  return result[0];
 }
-
+// console.log(sortCitiesArray([
+// { country: 'Russia',  city: 'Moscow' },
+// { country: 'Belarus', city: 'Minsk' },
+// { country: 'Poland',  city: 'Warsaw' },
+// { country: 'Russia',  city: 'Saint Petersburg' },
+// { country: 'Poland',  city: 'Krakow' },
+// { country: 'Belarus', city: 'Brest' }
+// ]))
+// console.log(['M', 'A'].sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)))
 /**
  * Creates an identity matrix of the specified size
  *
@@ -534,8 +560,15 @@ function getIntervalArray(start, end) {
  *   [ 'a', 'a', 'a', 'a' ]  => [ 'a' ]
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
-function distinct(/* arr */) {
-  throw new Error('Not implemented');
+function distinct(arr) {
+  const result = [];
+  arr.map((item) => {
+    if (result.indexOf(item) === -1) {
+      result.push(item);
+    }
+    return item;
+  });
+  return result;
 }
 
 /**
@@ -568,10 +601,13 @@ function distinct(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.map((item) => map.set(keySelector(item), []));
+  array.map((item) => map.set(keySelector(item),
+    [...map.get(keySelector(item)), valueSelector(item)]));
+  return map;
 }
-
 
 /**
  * Projects each element of the specified array to a sequence
@@ -586,10 +622,11 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  const result = [];
+  arr.map((item) => result.push(childrenSelector(item)));
+  return result.flat();
 }
-
 
 /**
  * Returns an element from the multidimensional array by the specified indexes.
@@ -603,11 +640,15 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  let arr1 = arr;
+  const result = indexes.map((index) => {
+    arr1 = arr1[index];
+    return arr1;
+  });
+  return result[result.length - 1];
 }
-
-
+// console.log(getElementByIndexes( [[[ 1, 2, 3]]], [ 0, 0, 1 ] ))
 /**
  * Swaps the head and tail of the specified array:
  * the head (first half) of array move to the end, the tail (last half) move to the start.
@@ -626,10 +667,19 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const result = [];
+  if (arr.length % 2 !== 0) {
+    result.push(arr.slice(Math.ceil(arr.length / 2), arr.length));
+    result.push(arr[Math.floor(arr.length / 2)]);
+    result.push(arr.slice(0, Math.floor(arr.length / 2)));
+  }
+  if (arr.length % 2 === 0) {
+    result.push(arr.slice(Math.ceil(arr.length / 2), arr.length));
+    result.push(arr.slice(0, Math.floor(arr.length / 2)));
+  }
+  return result.flat();
 }
-
 
 module.exports = {
   findElement,
