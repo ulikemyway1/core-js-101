@@ -27,8 +27,18 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  let result = num;
+  if (num % 3 === 0) {
+    result = 'Fizz';
+  }
+  if (num % 5 === 0) {
+    result = 'Buzz';
+  }
+  if (num % 3 === 0 && num % 5 === 0) {
+    result = 'FizzBuzz';
+  }
+  return result;
 }
 
 
@@ -43,10 +53,15 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  let result = 1;
+  let k = n;
+  while (k > 1) {
+    result *= k;
+    k -= 1;
+  }
+  return result;
 }
-
 
 /**
  * Returns the sum of integer numbers between n1 and n2 (inclusive).
@@ -60,8 +75,12 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let result = 0;
+  for (let i = n1; i <= n2; i += 1) {
+    result += i;
+  }
+  return result;
 }
 
 
@@ -80,8 +99,12 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  let result;
+  if ((a + b > c) && (a + c > b) && (b + c) > a) {
+    result = true;
+  } else result = false;
+  return result;
 }
 
 
@@ -164,8 +187,27 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const arr = str.split('');
+  let result = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    result.push(arr.filter((char) => {
+      if (char === arr[i]) {
+        return char;
+      }
+      return 0;
+    }));
+  }
+  const char = result.filter((item) => {
+    if (item.length === 1) {
+      return item;
+    }
+    return 0;
+  }).flat()[0];
+  if (char) {
+    result = char;
+  } else result = null;
+  return result;
 }
 
 
@@ -191,10 +233,28 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
-}
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let interval = '';
+  if (isStartIncluded) {
+    interval += '[';
+  } else {
+    interval += '(';
+  }
 
+  if (a >= b) {
+    interval += `${b}, `;
+    interval += a;
+  } else {
+    interval += `${a}, `;
+    interval += b;
+  }
+  if (isEndIncluded) {
+    interval += ']';
+  } else {
+    interval += ')';
+  }
+  return interval;
+}
 
 /**
  * Reverse the specified string (put all chars in reverse order)
@@ -208,8 +268,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -225,10 +285,16 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  let t = num;
+  const result = [];
+  while (t > 10) {
+    result.push(t % 10);
+    t = Math.floor(t / 10);
+  }
+  result.push(t);
+  return result.join('');
 }
-
 
 /**
  * Validates the CCN (credit card number) and return true if CCN is valid
@@ -268,8 +334,26 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let j = num;
+  function getDigits(n) {
+    let t = n;
+    const arr = [];
+    while (t >= 10) {
+      arr.push(t % 10);
+      t = Math.floor(t / 10);
+    }
+    arr.push(t);
+    return arr;
+  }
+  function getSum(n) {
+    return n.reduce((sum, cur) => sum + cur);
+  }
+  while (j >= 9) {
+    j = getSum(getDigits(j));
+  }
+  j = getSum(getDigits(j));
+  return j;
 }
 
 
