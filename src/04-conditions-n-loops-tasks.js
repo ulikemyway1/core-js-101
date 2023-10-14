@@ -140,8 +140,12 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  let isOverlay = false;
+  if (((rect1.top + rect1.height) >= rect2.top && (rect1.left + rect1.width) >= rect2.left)) {
+    isOverlay = true;
+  }
+  return isOverlay;
 }
 
 
@@ -316,10 +320,34 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const payload = ((ccn.toString()).slice(0, (ccn.toString()).length - 1)).split('').reverse()
+    .map((item) => +item);
+  const doubled = payload.map((item, index) => {
+    let z;
+    if (index === 0 || index % 2 === 0) {
+      z = item * 2;
+    } else z = item;
+    return z;
+  });
+  function getDigits(n) {
+    let j;
+    if (n >= 10) {
+      const arr = n.toString().split('').map((item) => +item);
+      j = arr.reduce((ac, cur) => ac + cur);
+    } else {
+      j = n;
+    }
+    return j;
+  }
+  const sum = doubled.map(getDigits).reduce((ac, cur) => ac + cur);
+  const checkDigit = (10 - (sum % 10)) % 10;
+
+  return ((ccn.toString()).split('')).slice(-1).map((item) => +item)[0] === checkDigit;
+  // return ccnIsValid;
 }
 
+// console.log(isCreditCardNumber (79927398713))
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
