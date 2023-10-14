@@ -344,10 +344,9 @@ function isCreditCardNumber(ccn) {
   const checkDigit = (10 - (sum % 10)) % 10;
 
   return ((ccn.toString()).split('')).slice(-1).map((item) => +item)[0] === checkDigit;
-  // return ccnIsValid;
 }
 
-// console.log(isCreditCardNumber (79927398713))
+
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -448,8 +447,35 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const splitArr = pathes.map((path) => path.split('/').map((item) => {
+    let z = item;
+    if (item === '') {
+      z = '/';
+    }
+    return z;
+  }));
+  let column = 0;
+  const rows = pathes.length - 1;
+  let isEqual = true;
+  while (isEqual) {
+    for (let i = 0; i <= rows; i += 1) {
+      if (splitArr[i][column] !== splitArr[0][column]) {
+        isEqual = false;
+        break;
+      }
+    }
+    column += 1;
+  }
+  const resultPath = column - 1;
+  let result = '';
+  splitArr[0].slice(0, resultPath).forEach((item, index) => {
+    if (index !== 0) {
+      result += item;
+      result += '/';
+    } else result += item;
+  });
+  return result;
 }
 
 
