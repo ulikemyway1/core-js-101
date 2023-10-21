@@ -175,10 +175,14 @@ function doRectanglesOverlap(rect1, rect2) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  let isInside = false;
+  if (((point.x - circle.center.x) ** 2 + (point.y
+    - circle.center.y) ** 2) < circle.radius ** 2) {
+    isInside = true;
+  }
+  return isInside;
 }
-
 
 /**
  * Returns the first non repeated char in the specified strings otherwise returns null.
@@ -405,10 +409,33 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  let testStr = str;
+  let tempStr = ' ';
+  let isBalanced = true;
+  let index = 1;
+  const maxIndex = str.length;
+  const config = ['[]', '{}', '()', '<>'];
+  while (index < maxIndex) {
+    for (let i = 0; i < config.length; i += 1) {
+      if (testStr.indexOf(config[i]) !== -1) {
+        tempStr = '';
+        for (let j = 0; j < testStr.length; j += 1) {
+          if (j !== testStr.indexOf(config[i]) && (j !== (testStr.indexOf(config[i]) + 1))) {
+            tempStr += testStr[j];
+          }
+        }
+        testStr = tempStr;
+        tempStr = '';
+      }
+    }
+    index += 1;
+  }
+  if (testStr.length !== 0) {
+    isBalanced = false;
+  }
+  return isBalanced;
 }
-
 
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
@@ -430,10 +457,17 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let dec = num;
+  const basis = n;
+  const arr = [];
+  while (Math.floor(dec / basis) !== 0) {
+    arr.push(dec % basis);
+    dec = Math.floor(dec / basis);
+  }
+  arr.push(dec % basis);
+  return (arr.reverse().join('')).toString();
 }
-
 
 /**
  * Returns the common directory path for specified array of full filenames.
