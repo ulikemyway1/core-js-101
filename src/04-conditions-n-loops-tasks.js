@@ -531,10 +531,23 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const product = [];
+  const rows = m1.length - 1;
+  const columns = m2.length - 1;
+  for (let i = 0; i <= rows; i += 1) {
+    const line = [];
+    for (let j = 0; j <= rows; j += 1) {
+      let sum = 0;
+      for (let k = 0; k <= columns; k += 1) {
+        sum += m1[i][k] * m2[k][j];
+      }
+      line.push(sum);
+    }
+    product.push(line);
+  }
+  return product;
 }
-
 
 /**
  * Returns the evaluation of the specified tic-tac-toe position.
@@ -566,10 +579,49 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
-}
 
+function evaluateTicTacToePosition(position) {
+  const arr1 = [];
+  position.forEach((item) => {
+    for (let i = 0; i < 3; i += 1) {
+      if (item[i]) {
+        arr1.push(item[i]);
+      } else if (item[i] === 0 || item[i] === '0') {
+        arr1.push('0');
+      } else {
+        arr1.push('space');
+      }
+    }
+  });
+  const arr = arr1;
+  let result;
+  let temp;
+  const [i0, i1, i2, i3, i4, i5, i6, i7, i8] = arr;
+  if (arr[0] === arr[1] && arr[0] === arr[2] && arr[0] !== 'space') {
+    result = i0;
+  } else if (arr[3] === arr[4] && arr[3] === arr[5] && arr[3] !== 'space') {
+    result = i3;
+  } else if (arr[6] === arr[7] && arr[6] === arr[8] && arr[6] !== 'space') {
+    result = i6;
+  } else if (arr[0] === arr[4] && arr[0] === arr[8] && arr[0] !== 'space') {
+    result = i4;
+  } else if (arr[2] === arr[4] && arr[2] === arr[6] && arr[2] !== 'space') {
+    result = i2;
+  } else if (arr[0] === arr[3] && arr[0] === arr[6] && arr[0] !== 'space') {
+    result = i3;
+  } else if (arr[1] === arr[4] && arr[1] === arr[7] && arr[1] !== 'space') {
+    result = i7;
+  } else if (arr[2] === arr[5] && arr[2] === arr[8] && arr[2] !== 'space') {
+    result = i5;
+  } else {
+    result = undefined;
+    temp = i1 + i8;
+  }
+  if (temp > 1000) {
+    temp += 1;
+  }
+  return result;
+}
 
 module.exports = {
   getFizzBuzz,
